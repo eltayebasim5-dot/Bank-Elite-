@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ELITE V7 - KINGDOM</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;font-family:'Tajawal',sans-serif;margin:0;padding:0}
+body{background:#050510;color:#fff;padding:10px}
+.glass{background:linear-gradient(145deg,#15152ee6,#0e0e1de6);border:1px solid #ffffff14;border-radius:20px;padding:14px;margin:10px 0}
+.btn{width:100%;padding:12px;border:none;border-radius:13px;font-weight:900;margin:6px 0;cursor:pointer}
+.btnG{background:linear-gradient(90deg,#f5c542,#ffe27a);color:#000}
+.btnD{background:#ffffff08;border:1px solid #ffffff14;color:#fff}
+.btnR{background:#ff2d5512;border:1px solid #ff2d5530;color:#ff8da3}
+.input{width:100%;padding:12px;background:#0a0a18;border:1px solid #ffffff14;border-radius:12px;color:#fff;margin:6px 0}
+.item{display:flex;justify-content:space-between;align-items:center;background:#ffffff06;border:1px solid #ffffff08;padding:11px;border-radius:12px;margin:6px 0;font-size:11px}
+.badge{padding:4px 9px;border-radius:20px;background:#ffffff10;font-size:9px}
+.gold{color:#f5c542}.green{color:#00ff9a}
+.tabs{display:flex;gap:6px;overflow:auto;padding:8px 0}
+.tab{white-space:nowrap;padding:9px 14px;border-radius:22px;background:#ffffff08;border:1px solid #ffffff10;font-size:10px;cursor:pointer}
+.tab.active{background:#f5c542;color:#000}
+.hide{filter:blur(10px)}
+.eye{cursor:pointer;background:#ffffff12;padding:5px 9px;border-radius:9px}
+.modal{position:fixed;inset:0;background:#000000cc;backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;z-index:100;padding:14px}
+.modal.show{display:flex}
+.sheet{background:#1a1a3a;border:1px solid #ffffff14;width:100%;max-width:580px;border-radius:20px;padding:16px;max-height:92vh;overflow:auto}
+.help{position:fixed;bottom:16px;left:16px;z-index:99;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#f5c542,#7b61ff);color:#000;font-size:22px;font-weight:900;border:none}
+</style>
+</head>
+<body>
+
+<div class="glass" style="text-align:center;border:1px solid #f5c54230">
+<div style="font-weight:900;font-size:18px;background:linear-gradient(90deg,#f5c542,#ffeaa7);-webkit-background-clip:text;-webkit-text-fill-color:transparent">𓇼 ELITE KINGDOM BANK V7 𓇼</div>
+<div style="font-size:8px;color:#ffffff55">V7 • إعدادات حسابي • بعد التسجيل يختفي التسجيل • بنك حقيقي</div>
+<div style="display:flex;gap:6px;justify-content:center;margin-top:8px;flex-wrap:wrap">
+<span class="badge gold">👥 <b id="cUsers">0</b></span>
+<span class="badge">💰 <b id="cBal">0</b></span>
+<span class="badge">🔑 <b id="cCodes">0</b></span>
+<span class="badge">📦 <b id="cOrders">0</b></span>
+</div>
+</div>
+
+<div class="glass">
+<div class="tabs" id="mainTabs">
+<div class="tab active" id="tabReg" onclick="sw('reg',this)">✨ تسجيل</div>
+<div class="tab" id="tabLogin" onclick="sw('login',this)">🔑 دخول</div>
+<div class="tab" id="tabTrans" onclick="sw('trans',this)">⚡ تحويل</div>
+<div class="tab" id="tabShop" onclick="sw('shop',this)">🛒 متجر</div>
+<div class="tab" id="tabLoan" onclick="sw('loan',this)">💳 قروض</div>
+<div class="tab" id="tabSettings" style="display:none" onclick="sw('settings',this)">⚙️ إعداداتي</div>
+<div class="tab" id="tabStatement" style="display:none" onclick="sw('statement',this)">📊 كشف حساب</div>
+<div class="tab" id="tabVip" style="display:none" onclick="sw('vip',this)">💎 VIP</div>
+<div class="tab" id="tabBranches" onclick="sw('branches',this)">🏦 فروع</div>
+<div class="tab" onclick="sw('admin',this)">🔐 إدارة</div>
+</div>
+
+<div id="pReg">
+<input id="rName" class="input" placeholder="✨ الاسم (يتكرر عادي)">
+<input id="rPhone" class="input" placeholder="📱 رقم الهاتف (لا يتكرر)" dir="ltr">
+<div style="position:relative"><input id="rPass" type="password" class="input" placeholder="🔒 الباسورد مخفي"><span class="eye" style="position:absolute;left:12px;top:15px" onclick="eye('rPass')">👁️</span></div>
+<select id="rBranch" class="input"></select>
+<details style="margin-top:8px"><summary style="font-size:11px;color:#f5c542;cursor:pointer">🔐 أسئلة الأمان (اختياري - مخفي)</summary>
+<div style="padding:10px;border:1px dashed #ffffff15;border-radius:12px;margin-top:6px">
+<select id="rQ1" class="input"><option>🐾 حيوانك الأليف؟</option><option>🏫 مدرستك؟</option><option>🌆 مدينتك؟</option></select>
+<input id="rA1" type="password" class="input" placeholder="إجابة 1 مخفية">
+<select id="rQ2" class="input"><option>👶 لقب طفولتك؟</option><option>🍔 أكلة مفضلة؟</option></select>
+<input id="rA2" type="password" class="input" placeholder="إجابة 2 مخفية">
+</div></details>
+<button class="btn btnG" onclick="doReg()">🚀 إنشاء حساب</button>
+<div id="rMsg" style="font-size:10px;color:#f5c542"></div>
+</div>
+
+<div id="pLogin" style="display:none">
+<input id="lQuery" class="input" placeholder="رقم / SN / TC 5 أرقام" dir="ltr">
+<div style="position:relative"><input id="lPass" type="password" class="input" placeholder="🔒 الباسورد"><span class="eye" style="position:absolute;left:12px;top:15px" onclick="eye('lPass')">👁️</span></div>
+<button class="btn btnG" onclick="doLogin()">دخول</button>
+<button class="btn btnD" onclick="openRecover()">❓ نسيت الباسورد؟</button>
+<div id="lMsg" style="font-size:10px"></div>
+<div id="myCard" style="display:none;margin-top:12px;background:linear-gradient(135deg,#1e1e4a,#3a2f18);padding:16px;border-radius:16px;border:1px solid #f5c54230">
+<div id="myBal" style="font-size:24px;font-weight:900;color:#f5c542">0 SDG</div>
+<div style="font-size:10px;line-height:2">
+👤 <b id="myName">-</b> • <span id="myBranch" class="badge gold">-</span> • 💎 <span id="myRank">عضو</span><br>
+📱 <span id="myPhone" dir="ltr" class="green">-</span> • 🔢 <b id="mySN" class="gold">-</b> • 🔑 <b id="myTC" class="green">-</b><br>
+🏦 <span id="myAcc" style="font-size:8px;color:#ffffff66">-</span><br>
+⭐ Lvl <span id="myLvl">1</span> • 🎁 <span id="myBonus">0</span>
+</div>
+<div style="display:flex;gap:6px;margin-top:10px"><button class="btn btnD" style="flex:1" onclick="logout()">خروج</button><button class="btn btnG" style="flex:1" onclick="daily()">🎁 يومي</button></div>
+</div>
+<div class="glass" style="margin-top:10px"><div style="font-weight:800;font-size:12px">📜 عملياتي فقط - مخفية</div><div id="myTxs" style="max-height:200px;overflow:auto;margin-top:8px"></div></div>
+</div>
+
+<div id="pTrans" style="display:none">
+<input id="tTo" class="input" placeholder="TC 5 أرقام / SN / رقم" oninput="suggest()" dir="ltr"><div id="sBox"></div>
+<input id="tAmt" type="number" class="input" placeholder="المبلغ"><input id="tNote" class="input" placeholder="ملاحظة">
+<button class="btn btnG" onclick="doTrans()">⚡ تحويل</button>
+<button class="btn btnD" onclick="doGift()">🎁 هدية بدون رسوم</button>
+<div id="tMsg" style="font-size:10px"></div>
+</div>
+
+<div id="pShop" style="display:none">
+<div style="font-weight:900">🛒 متجر + طلبات</div><div id="shopList" style="margin-top:10px"></div>
+<div style="margin-top:14px;padding:10px;border:1px dashed #f5c54230;border-radius:12px">
+<div style="font-size:11px;font-weight:800;color:#f5c542">📦 طلب منتج جديد</div>
+<input id="oName" class="input" placeholder="اسم المنتج"><input id="oPrice" type="number" class="input" placeholder="سعر مقترح"><input id="oReason" class="input" placeholder="سبب">
+<button class="btn btnG" onclick="requestOrder()">📤 إرسال طلب</button>
+</div>
+<div style="margin-top:10px"><div style="font-size:11px">📋 طلباتي فقط</div><div id="myOrders"></div></div>
+</div>
+
+<div id="pLoan" style="display:none">
+<div style="font-weight:900">💳 قروض</div>
+<div style="padding:10px;background:#ffffff06;border-radius:12px;margin-top:8px">
+<input id="loanAmt" type="number" class="input" placeholder="مبلغ القرض"><input id="loanReason" class="input" placeholder="سبب">
+<button class="btn btnG" onclick="requestLoan()">📤 طلب قرض</button>
+</div>
+<div style="margin-top:10px"><div style="font-size:11px">💳 قروضي فقط</div><div id="myLoans"></div></div>
+</div>
+
+<div id="pSettings" style="display:none">
+<div style="font-weight:900">⚙️ إعدادات حسابي - تظهر بعد التسجيل</div>
+<div style="margin-top:10px;padding:10px;border:1px solid #ffffff10;border-radius:12px;background:#ffffff05">
+<div style="font-size:11px;font-weight:800;color:#f5c542">🔒 تغيير الباسورد (مخفي)</div>
+<input id="sOldPass" type="password" class="input" placeholder="الباسورد القديم مخفي">
+<input id="sNewPass" type="password" class="input" placeholder="الباسورد الجديد مخفي">
+<button class="btn btnG" onclick="changeMyPass()">🔒 تغيير باسوردي</button>
+</div>
+<div style="margin-top:10px;padding:10px;border:1px solid #ffffff10;border-radius:12px;background:#ffffff05">
+<div style="font-size:11px;font-weight:800;color:#00ff9a">📱 تغيير رقم الهاتف</div>
+<input id="sNewPhone" class="input" placeholder="رقم جديد (لا يتكرر)" dir="ltr">
+<button class="btn btnD" onclick="changeMyPhone()">📱 تغيير الرقم</button>
+</div>
+<div style="margin-top:10px;padding:10px;border:1px solid #ffffff10;border-radius:12px;background:#ffffff05">
+<div style="font-size:11px;font-weight:800;color:#8b7bff">🏦 تغيير الفرع</div>
+<select id="sNewBranch" class="input"></select>
+<button class="btn btnD" onclick="changeMyBranch()">🏦 تغيير فرعي</button>
+</div>
+<div style="margin-top:10px;padding:10px;border:1px solid #ffffff10;border-radius:12px;background:#ffffff05">
+<div style="font-size:11px;font-weight:800;color:#f5c542">🔐 تحديث أسئلة الأمان (مخفية)</div>
+<select id="sQ1" class="input"><option>🐾 حيوانك الأليف؟</option><option>🏫 مدرستك؟</option><option>🌆 مدينتك؟</option></select>
+<input id="sA1" type="password" class="input" placeholder="إجابة جديدة مخفية">
+<select id="sQ2" class="input"><option>👶 لقب طفولتك؟</option><option>🍔 أكلة مفضلة؟</option></select>
+<input id="sA2" type="password" class="input" placeholder="إجابة جديدة مخفية">
+<button class="btn btnD" onclick="changeMySecurity()">🔐 تحديث أسئلة الأمان</button>
+</div>
+<div style="margin-top:10px">
+<button class="btn btnR" onclick="deleteMyAccount()">🗑️ حذف حسابي نهائي (مخفي)</button>
+</div>
+</div>
+
+<div id="pStatement" style="display:none">
+<div style="font-weight:900">📊 كشف حساب - بنك حقيقي</div>
+<div style="display:flex;gap:6px;margin-top:8px">
+<button class="btn btnD" style="flex:1" onclick="statementFilter('all')">الكل</button>
+<button class="btn btnD" style="flex:1" onclick="statementFilter('in')">⬇️ وارد</button>
+<button class="btn btnD" style="flex:1" onclick="statementFilter('out')">⬆️ صادر</button>
+</div>
+<div id="statementList" style="margin-top:10px"></div>
+<div style="margin-top:10px;padding:10px;background:#f5c54210;border-radius:12px;font-size:11px">
+💰 إجمالي وارد: <b id="stIn" class="green">0</b><br>
+💸 إجمالي صادر: <b id="stOut" style="color:#ff8da3">0</b><br>
+📊 الصافي: <b id="stNet" class="gold">0</b>
+</div>
+</div>
+
+<div id="pVip" style="display:none">
+<div style="font-weight:900">💎 نظام VIP + مستويات - اقتراحات جديدة</div>
+<div id="vipInfo" style="margin-top:10px"></div>
+<div style="margin-top:10px">
+<div style="font-size:11px">🏆 صدارة الفروع 25</div>
+<div id="branchStats" style="margin-top:8px"></div>
+</div>
+</div>
+
+<div id="pBranches" style="display:none">
+<div style="font-weight:900">🏦 فروع مملكة إيليت 25</div>
+<div id="branchesGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px"></div>
+</div>
+
+<div id="pAdmin" style="display:none">
+<div style="background:#ff2d550f;border:1px solid #ff2d5520;padding:10px;border-radius:12px;font-size:10px;color:#ff8da3">🔐 الإدارة - الباسورد مخفي hash - ما يظهر 9988</div>
+<select id="aRole" class="input"><option value="owner">👑 المالك</option><option value="yuno">🛡️ نائب المالك</option></select>
+<div style="position:relative"><input id="aPass" type="password" class="input" placeholder="🔒 باسورد الإدارة مخفي"><span class="eye" style="position:absolute;left:12px;top:15px" onclick="eye('aPass')">👁️</span></div>
+<button class="btn btnG" onclick="adminLogin()">🔓 فتح لوحة التحكم</button>
+<div id="aPanel" style="display:none;margin-top:12px">
+<div class="tabs">
+<div class="tab active" onclick="aSw('bank',this)">🏦 بنك</div>
+<div class="tab" onclick="aSw('accounts',this)">👥 حسابات</div>
+<div class="tab" onclick="aSw('orders',this)">📦 طلبات</div>
+<div class="tab" onclick="aSw('loans',this)">💳 قروض</div>
+<div class="tab" onclick="aSw('shopM',this)">🛒 متجر</div>
+</div>
+<div id="aBankTab"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><input id="abFrom" class="input" placeholder="من TC/SN" dir="ltr"><input id="abTo" class="input" placeholder="إلى TC/SN" dir="ltr"><input id="abAmt" type="number" class="input" placeholder="مبلغ"><input id="abNote" class="input" placeholder="ملاحظة"></div><button class="btn btnG" onclick="adminTransfer()">⚡ تحويل إداري</button><div style="display:flex;gap:6px"><button class="btn btnD" style="flex:1" onclick="addBonus()">💰 فوائد 2%</button><button class="btn btnD" style="flex:1" onclick="adminBulk()">📤 جماعي</button></div></div>
+<div id="aAccountsTab" style="display:none"><select id="eUser" class="input" onchange="loadEdit()"></select><div id="eInfo" class="glass" style="font-size:10px;padding:10px"></div><input id="eBal" type="number" class="input" placeholder="رصيد"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><button class="btn btnG" onclick="editBal()">💾 رصيد</button><button class="btn btnD" onclick="deductBal()">➖ خصم</button><button class="btn btnD" onclick="addBal()">➕ إضافة</button><button class="btn btnD" onclick="freezeUser()">🔒 تجميد</button><button class="btn btnD" onclick="banUser()">⛔ حظر</button><button class="btn btnD" onclick="regenTC()">🔑 رمز</button><button class="btn btnD" onclick="changeRank()">💎 رتبة</button><button class="btn btnR" onclick="delUser()">🗑️ حذف</button></div></div>
+<div id="aOrdersTab" style="display:none"><div id="allOrders"></div></div>
+<div id="aLoansTab" style="display:none"><div id="allLoans"></div></div>
+<div id="aShopMTab" style="display:none"><div style="display:flex;gap:6px"><input id="mName" class="input" placeholder="اسم المنتج" style="flex:2"><input id="mPrice" type="number" class="input" placeholder="سعر" style="flex:1"></div><input id="mDesc" class="input" placeholder="وصف"><button class="btn btnG" onclick="addProduct()">➕ إضافة</button><div id="mListAdmin" style="margin-top:10px"></div></div>
+<div id="aList" style="max-height:300px;overflow:auto;margin-top:12px"></div>
+<div style="display:flex;gap:6px;margin-top:10px"><button class="btn btnD" style="flex:1" onclick="exportData()">📤 تصدير</button><button class="btn btnR" style="flex:1" onclick="clearAllFixed()">💥 مسح</button></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="glass"><div style="font-weight:900">📜 كل العمليات (للإدارة)</div><div id="txs" style="max-height:200px;overflow:auto;margin-top:8px"></div></div>
+<button class="help" onclick="openHelp()">؟</button>
+
+<div id="mHelp" class="modal" onclick="if(event.target===this)closeHelp()"><div class="sheet"><div style="font-weight:900">📖 V7 بنك حقيقي</div><div style="font-size:11px;line-height:2;margin-top:10px">
+<b class="gold">✅ بعد التسجيل:</b><br>
+- قسم التسجيل يختفي تلقائيا<br>
+- تظهر 3 أقسام جديدة: إعداداتي، كشف حساب، VIP<br>
+- في إعداداتي: تغيير باسورد، رقم، فرع، أسئلة أمان، حذف حساب<br>
+- كشف حساب: وارد/صادر/صافي - مثل البنك الحقيقي<br>
+- VIP: مستويات + رتب + صدارة فروع<br>
+- فروع: 25 فرع مع إحصائيات<br>
+- عملياتي فقط مخفية عن الآخرين<br>
+</div><button class="btn btnG" onclick="closeHelp()">فهمت</button></div></div>
+
+<div id="mRecover" class="modal" onclick="if(event.target===this)closeRecover()"><div class="sheet"><div style="font-weight:900">🔐 استعادة</div><input id="recPhone" class="input" placeholder="رقم الهاتف" dir="ltr"><button class="btn btnD" onclick="loadRecoverQs()">تحميل أسئلتي</button><div id="recQs" style="display:none"><div id="recQ1Text" style="font-size:11px;color:#f5c542"></div><input id="recA1" type="password" class="input" placeholder="إجابة 1"><div id="recQ2Text" style="font-size:11px;color:#f5c542"></div><input id="recA2" type="password" class="input" placeholder="إجابة 2"><input id="recNewPass" type="password" class="input" placeholder="باسورد جديد"><button class="btn btnG" onclick="doRecover()">فتح</button></div><div id="recMsg" style="font-size:10px"></div><button class="btn btnD" onclick="closeRecover()">إغلاق</button></div></div>
+
+<script>
+const BRANCHES=["⛩️ طوكيو","🌤️ فلوكس","🕳️ فويد","🏆 قولد","🪸 كورال","👾 كيوس","💜 لافندر","🐧 لينوكس","🎲 مويرا","🌙 نايت","🌿 إسليانور","🌅 داون","📦 دريفت","🌧️ رايكو","☂️ ريفيل","❄️ ستارك","🌪️ ستورم","⬜ سكواد","⚔️ سلاي","⚪ شبرو","❄️ أثينا","🦁 أوليبرا","🌑 اونيكس","💥 إيسكرا","🍀 إيفي"];
+let users=JSON.parse(localStorage.getItem('elite_v7_users')||'[]');
+let txs=JSON.parse(localStorage.getItem('elite_v7_txs')||'[]');
+let market=JSON.parse(localStorage.getItem('elite_v7_market')||'[{"n":"👑 إمبراطور","p":50000,"d":"لقب ملكي"},{"n":"💎 VIP","p":20000,"d":"VIP شهر"}]');
+let orders=JSON.parse(localStorage.getItem('elite_v7_orders')||'[]');
+let loans=JSON.parse(localStorage.getItem('elite_v7_loans')||'[]');
+let cur=JSON.parse(localStorage.getItem('elite_v7_cur')||'null');
+let counter=Number(localStorage.getItem('elite_v7_counter')||'10001');
+let usedTC=new Set(users.map(u=>u.transferCode)); let usedSN=new Set(users.map(u=>u.serial));
+function hash(s){let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return 'hash_'+Math.abs(h).toString(16);}
+let adminHash=JSON.parse(localStorage.getItem('elite_v7_admin')||'null')||{owner:hash('9988'),yuno:hash('yuno2024')};
+function genTC(){let c;do{c=Math.floor(10000+Math.random()*90000).toString();}while(usedTC.has(c));usedTC.add(c);return c;}
+function genSN(){let s;do{s='ELITE-'+String(counter++).padStart(5,'0');}while(usedSN.has(s));usedSN.add(s);localStorage.setItem('elite_v7_counter',counter);return s;}
+function genAcc(){return '9700'+Math.floor(Math.random()*1e12).toString().padStart(12,'0');}
+function norm(p){return (p||'').replace(/[^0-9]/g,'');}
+function save(){localStorage.setItem('elite_v7_users',JSON.stringify(users));localStorage.setItem('elite_v7_txs',JSON.stringify(txs));localStorage.setItem('elite_v7_market',JSON.stringify(market));localStorage.setItem('elite_v7_orders',JSON.stringify(orders));localStorage.setItem('elite_v7_loans',JSON.stringify(loans));localStorage.setItem('elite_v7_cur',JSON.stringify(cur));localStorage.setItem('elite_v7_admin',JSON.stringify(adminHash));render();updateTabs();}
+function sw(p,el){['pReg','pLogin','pTrans','pShop','pLoan','pSettings','pStatement','pVip','pBranches','pAdmin'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});const t=document.getElementById('p'+p.charAt(0).toUpperCase()+p.slice(1));if(t)t.style.display='block';document.querySelectorAll('#mainTabs .tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');}
+function aSw(p,el){['aBankTab','aAccountsTab','aOrdersTab','aLoansTab','aShopMTab'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});const t=document.getElementById('a'+p.charAt(0).toUpperCase()+p.slice(1)+'Tab');if(t)t.style.display='block';if(el){el.parentElement.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));el.classList.add('active');}}
+function eye(id){const e=document.getElementById(id);e.type=e.type==='password'?'text':'password';}
+function updateTabs(){
+const logged = !!cur;
+document.getElementById('tabReg').style.display = logged ? 'none' : 'block';
+document.getElementById('tabLogin').style.display = logged ? 'none' : 'block';
+document.getElementById('tabSettings').style.display = logged ? 'block' : 'none';
+document.getElementById('tabStatement').style.display = logged ? 'block' : 'none';
+document.getElementById('tabVip').style.display = logged ? 'block' : 'none';
+if(logged){sw('settings',document.getElementById('tabSettings'));}
+}
+document.getElementById('rBranch').innerHTML=BRANCHES.map(b=>`<option>${b}</option>`).join('');
+document.getElementById('sNewBranch').innerHTML=BRANCHES.map(b=>`<option>${b}</option>`).join('');
+
+function doReg(){
+const name=rName.value.trim(); const phone=norm(rPhone.value); const pass=rPass.value; const branch=rBranch.value;
+const q1=rQ1.value, a1=rA1.value.trim(), q2=rQ2.value, a2=rA2.value.trim();
+if(!name){rMsg.innerText='❌ الاسم';return;}
+if(phone.length<8){rMsg.innerText='❌ رقم';return;}
+if(pass.length<6){rMsg.innerText='❌ باسورد 6+';return;}
+if(users.find(u=>norm(u.phone)===phone)){rMsg.innerText='❌ الرقم موجود';return;}
+let sec={}; if(a1&&a2){sec={q1,a1:hash(a1.toLowerCase()),q2,a2:hash(a2.toLowerCase())};}
+const u={name,phone,pass,branch,rank:'عضو',level:1,bal:50000,acc:genAcc(),serial:genSN(),transferCode:genTC(),...sec,date:Date.now(),bonus:0,frozen:false,banned:false};
+users.push(u); cur=u; save(); rMsg.innerHTML=`✅ تم • ${u.serial} • ${u.transferCode}`; render(); showMy(); updateTabs();
+}
+function doLogin(){
+const q=lQuery.value.trim(); const p=lPass.value; const n=norm(q);
+const u=users.find(x=>(norm(x.phone)===n||x.acc===q||x.serial===q||x.transferCode===q||x.name===q)&&x.pass===p);
+if(!u){lMsg.innerText='❌ بيانات خاطئة';return;}
+if(u.frozen){lMsg.innerText='🔒 مجمد';return;}
+if(u.banned){lMsg.innerText='⛔ محظور';return;}
+cur=u; save(); showMy(); updateTabs(); lMsg.innerText='✅ دخلت';
+}
+function showMy(){
+if(!cur){document.getElementById('myCard').style.display='none';return;}
+document.getElementById('myCard').style.display='block';
+myName.innerText=cur.name; myPhone.innerText=cur.phone; myAcc.innerText=cur.acc; mySN.innerText=cur.serial; myTC.innerText=cur.transferCode; myBranch.innerText=cur.branch; myLvl.innerText=cur.level||1; myBonus.innerText=(cur.bonus||0).toLocaleString(); myRank.innerText=cur.rank; myBal.innerText=cur.bal.toLocaleString()+' SDG';
+renderMyTxs(); renderMyOrders(); renderMyLoans(); renderStatement(); renderVip();
+}
+function logout(){cur=null;localStorage.removeItem('elite_v7_cur');document.getElementById('myCard').style.display='none';save(); updateTabs(); sw('reg',document.getElementById('tabReg'));}
+function suggest(){
+const q=tTo.value.toLowerCase(); const box=document.getElementById('sBox'); if(!q){box.innerHTML='';return;}
+const f=users.filter(u=>u.name.toLowerCase().includes(q)||norm(u.phone).includes(norm(q))||u.transferCode.includes(q)||u.serial.toLowerCase().includes(q)).slice(0,5);
+box.innerHTML=f.map(u=>`<div class="item" onclick="tTo.value='${u.transferCode}';sBox.innerHTML=''"><b>${u.name}</b> TC:${u.transferCode}</div>`).join('');
+}
+function doTrans(){
+if(!cur){tMsg.innerText='❌ سجل دخول';return;}
+const toQ=tTo.value.trim(); const amt=Number(tAmt.value); const note=tNote.value;
+const to=users.find(u=>u.name===toQ||norm(u.phone)===norm(toQ)||u.acc===toQ||u.transferCode===toQ||u.serial===toQ);
+if(!to||to.serial===cur.serial||to.frozen||to.banned||cur.bal<amt||amt<=0){tMsg.innerText='❌ خطأ';return;}
+const fee=Math.floor(amt*0.01); cur.bal-=amt; to.bal+=amt-fee;
+users.find(u=>u.serial===to.serial).bal=to.bal; users.find(u=>u.serial===cur.serial).bal=cur.bal;
+txs.unshift({from:cur.name,fromSN:cur.serial,to:to.name,toSN:to.serial,amt,fee,ref:'ELITE-'+Date.now().toString().slice(-6),note,date:Date.now(),type:'تحويل'}); save(); tMsg.innerText=`✅ تم`; showMy();
+}
+function doGift(){
+if(!cur){tMsg.innerText='❌ سجل دخول';return;}
+const toQ=tTo.value.trim(); const amt=Number(tAmt.value);
+const to=users.find(u=>u.transferCode===toQ||u.serial===toQ||norm(u.phone)===norm(toQ));
+if(!to||to.serial===cur.serial||cur.bal<amt){tMsg.innerText='❌ خطأ';return;}
+cur.bal-=amt; to.bal+=amt;
+users.find(u=>u.serial===to.serial).bal=to.bal; users.find(u=>u.serial===cur.serial).bal=cur.bal;
+txs.unshift({from:cur.name,fromSN:cur.serial,to:to.name,toSN:to.serial,amt,fee:0,ref:'GIFT-'+Date.now().toString().slice(-5),note:'هدية',date:Date.now(),type:'هدية'}); save(); tMsg.innerText=`🎁 هدية`; showMy();
+}
+function daily(){if(!cur)return; const now=Date.now(); if(now-(cur.lastBonus||0)<60000){alert('⏳ دقيقة');return;} const b=1000+(cur.level||1)*120; cur.bal+=b; cur.bonus=(cur.bonus||0)+b; cur.lastBonus=now; cur.level=(cur.level||1)+1; users.find(u=>u.serial===cur.serial).bal=cur.bal; save(); showMy(); alert(`🎁 ${b}`);}
+function renderMyTxs(){
+if(!cur)return; const my=txs.filter(t=>t.fromSN===cur.serial||t.toSN===cur.serial);
+document.getElementById('myTxs').innerHTML=my.slice(0,20).map(t=>`<div class="item"><div><b>${t.from} → ${t.to}</b><div style="font-size:9px;color:#ffffff55">${new Date(t.date).toLocaleString()} • REF:${t.ref}</div></div><span class="gold">${t.amt.toLocaleString()}</span></div>`).join('')||'لا يوجد';
+}
+function requestOrder(){
+if(!cur){alert('سجل دخول');return;}
+const n=oName.value.trim(); const p=Number(oPrice.value); const r=oReason.value.trim();
+if(!n){alert('اسم المنتج');return;}
+orders.unshift({id:'ORD-'+Date.now(),user:cur.name,userSN:cur.serial,phone:cur.phone,name:n,price:p||0,reason:r,status:'بانتظار',date:Date.now()}); save(); oName.value=''; oPrice.value=''; oReason.value=''; alert('تم إرسال الطلب'); renderMyOrders();
+}
+function renderMyOrders(){
+if(!cur)return; const my=orders.filter(o=>o.userSN===cur.serial);
+document.getElementById('myOrders').innerHTML=my.map(o=>`<div class="item"><div><b>${o.name}</b> - ${o.price.toLocaleString()}<br><span style="font-size:9px">${o.status}</span></div><span class="badge gold">${o.status}</span></div>`).join('')||'لا طلبات';
+}
+function requestLoan(){
+if(!cur){alert('سجل دخول');return;}
+const amt=Number(loanAmt.value); const reason=loanReason.value.trim();
+if(!amt){alert('مبلغ');return;}
+loans.unshift({id:'LOAN-'+Date.now(),user:cur.name,userSN:cur.serial,amt,reason,status:'بانتظار',rate:5,toPay:Math.floor(amt*1.05),date:Date.now()}); save(); loanAmt.value=''; loanReason.value=''; alert('طلب قرض مرسل'); renderMyLoans();
+}
+function renderMyLoans(){
+if(!cur)return; const my=loans.filter(l=>l.userSN===cur.serial);
+document.getElementById('myLoans').innerHTML=my.map(l=>`<div class="item"><div><b>${l.amt.toLocaleString()} SDG</b> - ${l.status}<br><span style="font-size:9px">سداد: ${l.toPay.toLocaleString()}</span></div><span class="badge gold">${l.status}</span></div>`).join('')||'لا قروض';
+}
+function renderStatement(){
+if(!cur)return;
+const my=txs.filter(t=>t.fromSN===cur.serial||t.toSN===cur.serial);
+const filter = window.stFilter || 'all';
+let filtered = my;
+if(filter==='in') filtered = my.filter(t=>t.toSN===cur.serial);
+if(filter==='out') filtered = my.filter(t=>t.fromSN===cur.serial);
+document.getElementById('statementList').innerHTML=filtered.slice(0,50).map(t=>`<div class="item"><div><b>${t.from} → ${t.to}</b><div style="font-size:9px">${new Date(t.date).toLocaleString()} • ${t.type||''} • REF:${t.ref}</div><div style="font-size:8px;color:#f5c542">${t.note||''}</div></div><span class="${t.fromSN===cur.serial?'':'green'}">${t.fromSN===cur.serial?'-':'+'}${t.amt.toLocaleString()}</span></div>`).join('')||'لا عمليات';
+const inTotal = my.filter(t=>t.toSN===cur.serial).reduce((a,b)=>a+b.amt,0);
+const outTotal = my.filter(t=>t.fromSN===cur.serial).reduce((a,b)=>a+b.amt,0);
+document.getElementById('stIn').innerText=inTotal.toLocaleString()+' SDG';
+document.getElementById('stOut').innerText=outTotal.toLocaleString()+' SDG';
+document.getElementById('stNet').innerText=(inTotal-outTotal).toLocaleString()+' SDG';
+}
+function statementFilter(f){window.stFilter=f; renderStatement();}
+function renderVip(){
+if(!cur)return;
+const rankIndex = ['عضو','VIP','إمبراطور','يونكو'].indexOf(cur.rank);
+const nextRank = ['عضو','VIP','إمبراطور','يونكو'][rankIndex+1]||'أقصى رتبة';
+document.getElementById('vipInfo').innerHTML=`
+<div style="padding:12px;background:linear-gradient(135deg,#1e1e4a,#3a2f18);border-radius:14px;border:1px solid #f5c54230">
+<div style="font-size:12px">💎 رتبتك: <b class="gold">${cur.rank}</b> • ⭐ مستوى ${cur.level||1}</div>
+<div style="font-size:10px;color:#ffffff88;margin-top:6px">الرتبة القادمة: ${nextRank} - تحتاج ${((cur.level||1)*10000).toLocaleString()} SDG إجمالي عمليات</div>
+<div style="margin-top:8px;background:#ffffff10;height:8px;border-radius:10px;overflow:hidden"><div style="height:100%;width:${Math.min(100,(cur.level||1)*10)}%;background:linear-gradient(90deg,#f5c542,#ffe27a)"></div></div>
+</div>`;
+document.getElementById('branchStats').innerHTML=BRANCHES.map(b=>{
+const name=b.split(' ').slice(1).join(' ')||b; const clean=b.replace(/[^a-zA-Z\u0600-\u06FF]/g,'').trim()||name;
+const count=users.filter(u=>u.branch===b||u.branch===name||u.branch===clean).length;
+const total=users.filter(u=>u.branch===b||u.branch===name||u.branch===clean).reduce((a,x)=>a+x.bal,0);
+return `<div class="item"><b>${b}</b><span>${count} عضو • ${total.toLocaleString()}</span></div>`;
+}).join('');
+}
+
+function render(){
+document.getElementById('cUsers').innerText=users.length;
+document.getElementById('cBal').innerText=users.reduce((a,b)=>a+b.bal,0).toLocaleString();
+document.getElementById('cCodes').innerText=usedTC.size;
+document.getElementById('cOrders').innerText=orders.length;
+document.getElementById('txs').innerHTML=txs.slice(0,30).map(t=>`<div class="item"><div><b>${t.from} → ${t.to}</b><div style="font-size:9px;color:#ffffff55">${new Date(t.date).toLocaleString()} • REF:${t.ref}</div></div><span class="gold">${t.amt.toLocaleString()}</span></div>`).join('')||'لا عمليات';
+document.getElementById('shopList').innerHTML=market.map((m,i)=>`<div class="item" style="flex-direction:column;align-items:flex-start"><div style="display:flex;justify-content:space-between;width:100%"><b>✨ ${m.n}</b><span class="badge gold">${m.p.toLocaleString()}</span></div><div style="font-size:9px;color:#ffffff66">${m.d||''}</div><button class="btn btnG" style="padding:8px" onclick="buyProduct(${i})">🛒 شراء</button></div>`).join('');
+document.getElementById('mListAdmin').innerHTML=market.map((m,i)=>`<div class="item"><b>${m.n}</b> ${m.p.toLocaleString()} <button class="btn btnR" style="width:auto;padding:4px 8px" onclick="delProduct(${i})">🗑️</button></div>`).join('');
+document.getElementById('allOrders').innerHTML=orders.map(o=>`<div class="item"><div><b>${o.user}</b> طلب ${o.name} - ${o.price.toLocaleString()}<br><span style="font-size:9px">${o.status}</span></div><div><button class="btn btnG" style="width:auto;padding:5px 8px" onclick="approveOrder('${o.id}')">✅</button><button class="btn btnR" style="width:auto;padding:5px 8px" onclick="rejectOrder('${o.id}')">❌</button></div></div>`).join('')||'لا طلبات';
+document.getElementById('allLoans').innerHTML=loans.map(l=>`<div class="item"><div><b>${l.user}</b> قرض ${l.amt.toLocaleString()}<br><span style="font-size:9px">${l.status}</span></div><div><button class="btn btnG" style="width:auto;padding:5px 8px" onclick="approveLoan('${l.id}')">✅</button><button class="btn btnR" style="width:auto;padding:5px 8px" onclick="rejectLoan('${l.id}')">❌</button></div></div>`).join('')||'لا قروض';
+document.getElementById('branchesGrid').innerHTML=BRANCHES.map(b=>{
+const count=users.filter(u=>u.branch===b).length;
+const total=users.filter(u=>u.branch===b).reduce((a,x)=>a+x.bal,0);
+return `<div class="item" style="flex-direction:column;align-items:flex-start"><b>${b}</b><span style="font-size:9px">${count} عضو • ${total.toLocaleString()} SDG</span></div>`;
+}).join('');
+const eUser=document.getElementById('eUser'); if(eUser) eUser.innerHTML=users.map(u=>`<option value="${u.serial}">${u.serial} | ${u.transferCode} | ${u.name}</option>`).join('');
+if(cur){renderMyTxs(); renderMyOrders(); renderMyLoans(); renderStatement(); renderVip();}
+}
+function buyProduct(i){if(!cur){alert('سجل دخول');return;} const m=market[i]; if(cur.bal<m.p){alert('رصيد غير كافي');return;} cur.bal-=m.p; users.find(u=>u.serial===cur.serial).bal=cur.bal; txs.unshift({from:cur.name,fromSN:cur.serial,to:'المتجر',toSN:'MARKET',amt:m.p,ref:'SHOP-'+Date.now().toString().slice(-5),note:m.n,date:Date.now(),type:'شراء'}); save(); showMy(); alert(`✅ اشتريت ${m.n}`);}
+function addProduct(){const n=mName.value.trim(); const p=Number(mPrice.value); const d=mDesc.value.trim(); if(!n||!p){alert('اسم وسعر');return;} market.push({n,p,d}); save(); mName.value=''; mPrice.value=''; mDesc.value=''; render();}
+function delProduct(i){market.splice(i,1); save();}
+function approveOrder(id){const o=orders.find(x=>x.id===id); if(!o)return; o.status='تم التنفيذ ✅'; save(); alert('تم');}
+function rejectOrder(id){const o=orders.find(x=>x.id===id); if(!o)return; o.status='مرفوض ❌'; save();}
+function approveLoan(id){const l=loans.find(x=>x.id===id); if(!l||l.status!=='بانتظار')return; const u=users.find(x=>x.serial===l.userSN); if(!u)return; u.bal+=l.amt; l.status='تمت الموافقة ✅'; txs.unshift({from:'البنك',fromSN:'BANK',to:l.user,toSN:l.userSN,amt:l.amt,ref:'LOAN-'+Date.now().toString().slice(-5),note:'قرض',date:Date.now(),type:'قرض'}); save(); alert('تمت الموافقة');}
+function rejectLoan(id){const l=loans.find(x=>x.id===id); if(!l)return; l.status='مرفوض ❌'; save();}
+function openHelp(){document.getElementById('mHelp').classList.add('show');}
+function closeHelp(){document.getElementById('mHelp').classList.remove('show');}
+function openRecover(){document.getElementById('mRecover').classList.add('show');}
+function closeRecover(){document.getElementById('mRecover').classList.remove('show');}
+function loadRecoverQs(){const phone=norm(recPhone.value); const u=users.find(x=>norm(x.phone)===phone); if(!u||!u.q1){recMsg.innerText='❌ لا يوجد أسئلة';return;} recQ1Text.innerText='س1: '+u.q1; recQ2Text.innerText='س2: '+u.q2; recQs.style.display='block'; recMsg.innerText='✅ أجب'; recQs.dataset.serial=u.serial;}
+function doRecover(){const serial=recQs.dataset.serial; const u=users.find(x=>x.serial===serial); if(!u)return; const a1=recA1.value.trim().toLowerCase(), a2=recA2.value.trim().toLowerCase(), np=recNewPass.value; if(hash(a1)!==u.a1||hash(a2)!==u.a2){recMsg.innerText='❌ إجابات خاطئة';return;} if(np.length<6){recMsg.innerText='❌ باسورد 6+';return;} u.pass=np; save(); recMsg.innerText=`✅ تم`; alert('تم فتح الحساب');}
+function adminLogin(){const role=aRole.value; const pass=aPass.value; if(hash(pass)!==adminHash[role]){alert('❌ باسورد غلط');return;} document.getElementById('aPanel').style.display='block'; document.getElementById('aList').innerHTML=users.map(u=>`<div class="item"><div><b>${u.name}</b> SN:${u.serial} TC:${u.transferCode}<br><span style="font-size:9px">📱 ${u.phone}<br>باسورد: <span class="hide" id="p_${u.serial}">••••••••</span> <span class="eye" onclick="document.getElementById('p_${u.serial}').classList.toggle('hide');document.getElementById('p_${u.serial}').innerText=document.getElementById('p_${u.serial}').classList.contains('hide')?'••••••••':'${u.pass}'">👁️</span></span></div><span class="gold">${u.bal.toLocaleString()}</span></div>`).join('');}
+function loadEdit(){const ser=eUser.value; const u=users.find(x=>x.serial===ser); if(!u)return; eBal.value=u.bal; document.getElementById('eInfo').innerHTML=`👤 ${u.name} • 📱 ${u.phone}<br>🔢 ${u.serial} • 🔑 ${u.transferCode}<br>💰 ${u.bal.toLocaleString()}`;}
+function editBal(){const ser=eUser.value; const u=users.find(x=>x.serial===ser); if(!u)return; u.bal=Number(eBal.value); save(); alert('تم');}
+function deductBal(){const ser=eUser.value; const u=users.find(x=>x.serial===ser); if(!u)return; const amt=Number(prompt('خصم؟','1000')); if(!amt||u.bal<amt)return; u.bal-=amt; save(); alert('خصم');}
+function addBal(){const ser=eUser.value; const u=users.find(x=>x.serial===ser); if(!u)return; const amt=Number(prompt('إضافة؟','1000')); if(!amt)return; u.bal+=amt; save(); alert('إضافة');}
+function freezeUser(){const ser=eUser.value; const u=users.find(x=>x.serial===ser); if(!u)return; u.frozen=!u.frozen; save(); alert(u.frozen?'مجمد':'فك');}
+function banUser(){const ser=eUser.value; const u=users.find(x=>x.serial===ser); if(!u)return; u.banned=!u.banned; save(); alert(u.banned?'محظور':'فك');}
+function regenTC(){const ser=eUser.value; const u=users.find(x=>x.serial===ser); if(!u)return; usedTC.delete(u.transferCode); u.transferCode=genTC(); save(); alert(`رمز جديد: ${u.transferCode}`);}
+function changeRank(){const ser=eUser.value; const u=users.find(x=>x.serial===ser); if(!u)return; const r=prompt('رتبة جديدة؟',u.rank); if(!r)return; u.rank=r; save();}
+function delUser(){const ser=eUser.value; if(!confirm(`حذف ${ser}؟`))return; const u=users.find(x=>x.serial===ser); if(u){usedTC.delete(u.transferCode);usedSN.delete(u.serial);} users=users.filter(x=>x.serial!==ser); if(cur?.serial===ser){cur=null;document.getElementById('myCard').style.display='none';} save(); updateTabs();}
+function adminTransfer(){const fQ=abFrom.value.trim(); const tQ=abTo.value.trim(); const amt=Number(abAmt.value); if(!fQ||!tQ||!amt){alert('من وإلى ومبلغ');return;} const f=users.find(u=>u.transferCode===fQ||u.serial===fQ||norm(u.phone)===norm(fQ)); const t=users.find(u=>u.transferCode===tQ||u.serial===tQ||norm(u.phone)===norm(tQ)); if(!f||!t||f.bal<amt){alert('خطأ');return;} const fee=Math.floor(amt*0.01); f.bal-=amt; t.bal+=amt-fee; txs.unshift({from:f.name,fromSN:f.serial,to:t.name,toSN:t.serial,amt,fee,ref:'ADM-'+Date.now().toString().slice(-6),note:abNote.value||'إداري',date:Date.now(),type:'إداري'}); save(); alert('تم تحويل إداري');}
+function addBonus(){if(!confirm('فوائد 2% للكل؟'))return; users.forEach(u=>u.bal+=Math.floor(u.bal*0.02)); save();}
+function adminBulk(){if(!confirm('تحويل 1000 للكل؟'))return; users.forEach(u=>u.bal+=1000); save(); alert('تم جماعي');}
+function exportData(){const blob=new Blob([JSON.stringify({users,txs,market,orders,loans,counter,adminHash},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`elite-v7-${Date.now()}.json`;a.click();}
+function clearAllFixed(){if(!confirm('مسح كل البيانات؟'))return; if(!confirm('تأكيد نهائي؟'))return; users=[]; txs=[]; market=[]; orders=[]; loans=[]; usedTC=new Set(); usedSN=new Set(); counter=10001; cur=null; localStorage.clear(); save(); updateTabs(); alert('تم المسح');}
+function changeMyPass(){if(!cur)return; const old=sOldPass.value; const nw=sNewPass.value; if(cur.pass!==old){alert('❌ الباسورد القديم غلط');return;} if(nw.length<6){alert('❌ الجديد 6+');return;} cur.pass=nw; users.find(u=>u.serial===cur.serial).pass=nw; save(); alert('✅ تم تغيير الباسورد - مخفي'); sOldPass.value=''; sNewPass.value='';}
+function changeMyPhone(){if(!cur)return; const np=norm(sNewPhone.value); if(np.length<8){alert('❌ رقم غير صحيح');return;} if(users.find(u=>norm(u.phone)===np&&u.serial!==cur.serial)){alert('❌ الرقم موجود - لا يتكرر');return;} cur.phone=np; users.find(u=>u.serial===cur.serial).phone=np; save(); showMy(); alert('✅ تم تغيير الرقم'); sNewPhone.value='';}
+function changeMyBranch(){if(!cur)return; const nb=sNewBranch.value; cur.branch=nb; users.find(u=>u.serial===cur.serial).branch=nb; save(); showMy(); alert(`✅ فرع جديد: ${nb}`);}
+function changeMySecurity(){if(!cur)return; const q1=sQ1.value, a1=sA1.value.trim(), q2=sQ2.value, a2=sA2.value.trim(); if(!a1||!a2){alert('إجابتين');return;} cur.q1=q1; cur.a1=hash(a1.toLowerCase()); cur.q2=q2; cur.a2=hash(a2.toLowerCase()); users.find(u=>u.serial===cur.serial).q1=q1; users.find(u=>u.serial===cur.serial).a1=cur.a1; users.find(u=>u.serial===cur.serial).q2=q2; users.find(u=>u.serial===cur.serial).a2=cur.a2; save(); alert('✅ تم تحديث أسئلة الأمان - مخفية'); sA1.value=''; sA2.value='';}
+function deleteMyAccount(){if(!cur)return; if(!confirm(`حذف حسابك نهائي ${cur.name}؟ لا رجعة!`))return; if(!confirm('تأكيد أخير - حذف نهائي؟'))return; usedTC.delete(cur.transferCode); usedSN.delete(cur.serial); users=users.filter(u=>u.serial!==cur.serial); cur=null; localStorage.removeItem('elite_v7_cur'); save(); updateTabs(); sw('reg',document.getElementById('tabReg')); alert('💥 تم حذف حسابك');}
+
+render(); updateTabs(); if(cur)showMy();
+</script>
+</body>
+</html>
